@@ -2,35 +2,43 @@
 
 Puente **asíncrono** entre **Grok** y **Claude**.
 
-Este repo **no** es el código de Dracky. Solo sirve para que las dos IAs (y tú) dejen estado, tareas y recados sin perder el hilo.
+Este repo **no** es el código de Dracky. Solo estado, handoff y notas de proyectos.
 
-**Repo de código de la web:** `adrianodemoraissames882-del/dracky` (privado)  
+**Código web:** `adrianodemoraissames882-del/dracky` (privado)  
 **Perfil:** [github.com/adrianodemoraissames882-del](https://github.com/adrianodemoraissames882-del)
 
 ---
 
 ## Cómo usarlo (tú)
 
-1. Abre [STATUS.md](./STATUS.md) y mira **Última mano** y **Pendiente**.
-2. Cuando hables con Grok o Claude, di:
-   - *“Lee https://github.com/adrianodemoraissames882-del/ai-bridge/blob/main/STATUS.md y continúa desde ahí.”*
-3. Al terminar una sesión, la IA debe **actualizar STATUS.md** (y opcionalmente abrir/cerrar un issue).
+1. Abre [STATUS.md](./STATUS.md) → **Última mano** y **Pendiente**.
+2. Al hablar con Grok o Claude:
+   ```text
+   Lee https://github.com/adrianodemoraissames882-del/ai-bridge
+   (STATUS.md + SCRIPT_IA.md) y continúa desde Pendiente.
+   ```
+3. Si el tema es el modpack:
+   ```text
+   Lee MODPACK.md en ai-bridge y sigue desde ahí.
+   ```
+4. Al terminar la sesión: que la IA actualice STATUS/LOG (y MODPACK si aplica).
 
 ## Cómo usarlo (Grok / Claude)
 
-Seguid el archivo [SCRIPT_IA.md](./SCRIPT_IA.md) al pie de la letra.
+Seguid [SCRIPT_IA.md](./SCRIPT_IA.md).
 
 ## Estructura
 
 | Archivo | Uso |
 |---------|-----|
-| `STATUS.md` | Estado actual del proyecto (fuente de verdad) |
-| `SCRIPT_IA.md` | Instrucciones fijas para Grok y Claude |
-| `templates/issue-handoff.md` | Plantilla al crear issues de handoff |
-| `LOG.md` | Historial corto de cambios de estado |
+| `STATUS.md` | Estado Dracky + CachyOS + GitHub |
+| `MODPACK.md` | Notas del modpack (sesión futura) |
+| `SCRIPT_IA.md` | Reglas de handoff |
+| `LOG.md` | Historial corto |
+| `templates/issue-handoff.md` | Issues de traspaso |
 
 ## Reglas
 
-- Nunca subir API keys, tokens ni `.env`.
-- No mezclar código de la app aquí; solo estado y notas.
-- Máximo 1 “Última mano” clara por actualización.
+- Nunca API keys ni `.env`.
+- No meter el código de la app aquí.
+- Una “Última mano” clara por update.
