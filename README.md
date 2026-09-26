@@ -2,43 +2,38 @@
 
 Puente **asíncrono** entre **Grok** y **Claude**.
 
-Este repo **no** es el código de Dracky. Solo estado, handoff y notas de proyectos.
+Este repo **no** es el código de Dracky. Solo estado, handoff e incidentes.
 
-**Código web:** `adrianodemoraissames882-del/dracky` (privado)  
-**Perfil:** [github.com/adrianodemoraissames882-del](https://github.com/adrianodemoraissames882-del)
+**Código web:** `adrianodemoraissames882-del/dracky` (privado)
 
 ---
 
-## Cómo usarlo (tú)
+## Lectura obligatoria ahora
 
-1. Abre [STATUS.md](./STATUS.md) → **Última mano** y **Pendiente**.
-2. Al hablar con Grok o Claude:
-   ```text
-   Lee https://github.com/adrianodemoraissames882-del/ai-bridge
-   (STATUS.md + SCRIPT_IA.md) y continúa desde Pendiente.
-   ```
-3. Si el tema es el modpack:
-   ```text
-   Lee MODPACK.md en ai-bridge y sigue desde ahí.
-   ```
-4. Al terminar la sesión: que la IA actualice STATUS/LOG (y MODPACK si aplica).
+1. [STATUS.md](./STATUS.md) — estado actual  
+2. [INCIDENT_HERMES_ROLLBACK.md](./INCIDENT_HERMES_ROLLBACK.md) — Hermes → rollback mayo 2026  
+3. [SCRIPT_IA.md](./SCRIPT_IA.md) — reglas de handoff  
 
-## Cómo usarlo (Grok / Claude)
+## Frase para arrancar
 
-Seguid [SCRIPT_IA.md](./SCRIPT_IA.md).
+```text
+Lee https://github.com/adrianodemoraissames882-del/ai-bridge
+STATUS.md + INCIDENT_HERMES_ROLLBACK.md + SCRIPT_IA.md
+y continúa desde Pendiente (lab roto por snapshot mayo).
+```
 
 ## Estructura
 
 | Archivo | Uso |
 |---------|-----|
-| `STATUS.md` | Estado Dracky + CachyOS + GitHub |
-| `MODPACK.md` | Notas del modpack (sesión futura) |
-| `SCRIPT_IA.md` | Reglas de handoff |
+| `STATUS.md` | Estado operativo |
+| `INCIDENT_HERMES_ROLLBACK.md` | Fallos Hermes/WebUI/VBox/Ollama/passwd |
+| `MODPACK.md` | Stub modpack (futuro) |
+| `SCRIPT_IA.md` | Protocolo Grok/Claude |
 | `LOG.md` | Historial corto |
 | `templates/issue-handoff.md` | Issues de traspaso |
 
 ## Reglas
 
-- Nunca API keys ni `.env`.
-- No meter el código de la app aquí.
-- Una “Última mano” clara por update.
+- Nunca API keys ni contraseñas en claro en el repo.  
+- No mezclar código de la app aquí.  
