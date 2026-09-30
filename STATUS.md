@@ -5,120 +5,108 @@
 ## Última mano
 
 - **Quién:** Grok
-- **Cuándo:** 2026-09-29
-- **Qué hizo:** Lab reconstruido desde cero. VM vieja borrada. Nueva **Dracky-lab** con Ubuntu Server instalado (usuario `adri`, hostname `dracky`, OpenSSH). Empieza stack: apt → Docker → Tailscale → Ollama → Open WebUI → Hermes. **No tocar repo `dracky` (Lovable).**
+- **Cuándo:** 2026-09-30
+- **Qué hizo:** Lab base operativo. Open WebUI + DeepSeek + 5 modos + `/titanwing`/`/draky`. Siguiente: instalar **Hermes Agent**. **No tocar repo `dracky` (Lovable).**
 
 ---
 
-## Lab — estado actual (2026-09-29)
+## Lab — estado actual (2026-09-30)
 
 | Ítem | Estado |
 |------|--------|
-| VM antigua (bloqueada / snapshot mayo) | **Eliminada** |
-| VM nueva **Dracky-lab** | **Ubuntu instalado** |
-| Usuario / host | `adri` @ `dracky` |
-| OpenSSH | Instalado en el setup |
-| Disco | ~80–87 GB VDI, LVM (ampliar root si quedó ~42G libre) |
-| RAM / CPU VBox | 8 GB / 4 CPUs recomendado |
-| Docker / Tailscale / Ollama / WebUI / Hermes | **Pendiente instalar ahora** |
+| VM **Dracky-lab** | Ubuntu Server, user `adri`, host `dracky` |
+| Docker | OK (`docker` en groups) |
+| Tailscale | OK — IP lab ~`100.66.109.25` |
+| Ollama | OK — `*:11434` / `0.0.0.0`, CPU-only en VM |
+| Open WebUI | OK — `http://100.66.109.25:3000`, login hecho |
+| DeepSeek API | Conectada en WebUI (OpenAI-compat `https://api.deepseek.com/v1`) |
+| Modelos base | llama3.2:3b, qwen2.5:3b, DeepSeek-V4-Pro, DeepSeek-V4.1-Flash, Arena |
+| **5 modos Dracky** | Creados (base **única** cada uno) + REGLA no-validar |
+| `/titanwing` + `/draky` | En system prompts (personalidad off/on; reglas del modo se mantienen) |
+| Hermes Agent | **Pendiente instalar** |
+| Instantáneas | Hacer `2026-09-30-pre-hermes` antes de Hermes; luego `…-hermes-ok` |
 
-### Orden de instalación (en curso)
+### Asignación modos → base (no reutilizar)
 
-1. [ ] `timedatectl` NTP + `apt update && upgrade`
-2. [ ] Ampliar LVM si `/` ~42G y hay free en VG
-3. [ ] Docker + grupo docker
-4. [ ] Tailscale (cuenta Adri)
-5. [ ] Ollama + `OLLAMA_HOST=0.0.0.0:11434` (palabra **Environment** correcta)
-6. [ ] Open WebUI (Docker) — **anotar** email+password día 1
-7. [ ] Instantánea VBox `2026-09-29-base-ok`
-8. [ ] Hermes (4 CPU / 8192 RAM / 51200 disk / skip messaging)
-9. [ ] Instantánea `2026-09-29-hermes-ok`
-
-### Lecciones (no repetir)
-
-- Anotar contraseñas Linux y Open WebUI el día 1.
-- Override Ollama: `Environment=` (no typo) + `daemon-reload` + **restart** + `ss -tlnp \| grep 11434` → debe ser `0.0.0.0`, no solo `127.0.0.1`.
-- WebUI ≠ Ollama (Ollama sin password).
-- Instantáneas **datadas**; no restaurar basura antigua.
-- **Repo `dracky` (Lovable): no tocar** salvo petición explícita del usuario.
-
-Histórico incidente: `INCIDENT_HERMES_ROLLBACK.md`.
-
----
-
-## Contexto del usuario
-
-- **Nombre:** Adriano (Adri) / Darcko
-- **Email:** adrianodemoraissames882@gmail.com
-- **GitHub:** `adrianodemoraissames882-del`
-- **Estudios:** SMR informática
-- **PC host:** HP Victus 15L (Ryzen 5 5600G, RTX 3050 8GB, 16GB RAM, Win11)
-
----
-
-## Dracky — producto
-
-IA compañero dragón. Modos: RÚNICO · FULMÍNEO · ÍGNEO · ARCANO · ETÉREO.  
-Regla: no validar por defecto; decir errores y proponer lo simple.  
-Web: https://dracky.lovable.app (gestión en **Lovable**, código en repo privado `dracky`).  
-APIs diseño: Ollama → DeepSeek → Groq.
+| Modo | Base |
+|------|------|
+| RÚNICO | DeepSeek-V4-Pro |
+| ARCANO | DeepSeek-V4.1-Flash |
+| FULMÍNEO | llama3.2:3b |
+| ÍGNEO | qwen2.5:3b |
+| ETÉREO | Arena Model (o llava si se prefiere visión) |
 
 ### Stack lab objetivo
 
-Ubuntu Server + Tailscale + Ollama + Open WebUI + Hermes Agent + Docker.
+Ubuntu + Tailscale + Ollama + Open WebUI + **Hermes** + DeepSeek (API) + local fallback.
+
+### Lecciones
+
+- No tocar **`dracky`** (Lovable) sin OK explícito.
+- Ollama override: `Environment=` correcto; verificar `ss` → no solo 127.0.0.1.
+- Anotar passwords WebUI/Linux día 1.
+- Instantáneas datadas.
+
+Histórico: `INCIDENT_HERMES_ROLLBACK.md`.
 
 ---
 
-## CachyOS
+## Contexto usuario
 
-Prueba rice en VM separada: **cerrada** (base OK).
+- Adriano / Darcko · `adrianodemoraissames882@gmail.com` · GH `adrianodemoraissames882-del` · SMR · HP Victus 15L
+
+---
+
+## Dracky producto
+
+IA compañero dragón. Web: https://dracky.lovable.app (solo Lovable UI).  
+APIs: Ollama local → DeepSeek → (Groq opcional).
 
 ---
 
 ## GitHub
 
-| Repo | Uso | ¿Tocar? |
-|------|-----|--------|
-| **`ai-bridge`** | Handoff Grok↔Claude | Sí |
-| **`dracky-hub`** | Docs / recuperación web | Sí (docs) |
-| **`Darcko`** | Profile README | OK |
-| **`dracky`** | Código Lovable | **NO** sin OK usuario |
-| `draky-backup` | Backup | No borrar |
+| Repo | Uso |
+|------|-----|
+| **ai-bridge** | Handoff Grok↔Claude |
+| **dracky** | Lovable — **NO tocar** |
+| **dracky-hub** | Docs web |
+| **Darcko** | Profile README |
 
 ---
 
 ## Hecho
 
-- [x] ai-bridge + incidentes documentados
-- [x] CachyOS rice prueba
-- [x] VM vieja eliminada; **Dracky-lab** Ubuntu limpio instalado (2026-09-29)
-- [x] Profile README Darcko actualizado
+- [x] Rebuild VM desde cero (sept 2026)
+- [x] Docker, Tailscale, Ollama 0.0.0.0, Open WebUI
+- [x] DeepSeek en Connections
+- [x] 5 modos + REGLA + /titanwing /draky
+- [x] Chat local verificado
 
-## Pendiente (prioridad)
+## Pendiente
 
-1. **Lab ahora:** NTP + apt + Docker + Tailscale + Ollama + WebUI
-2. Snapshot base
-3. Hermes + snapshot
-4. Personalidad / 5 modos en WebUI
-5. Web Lovable: solo si el usuario lo pide (arreglar en Lovable UI, no commits sueltos en `dracky`)
+1. Instantánea pre-Hermes
+2. **Instalar Hermes** (install.sh oficial + setup DeepSeek; messaging Skip de momento)
+3. Instantánea post-Hermes
+4. SOUL.md personalidad Dracky en Hermes (opcional)
+5. Web Lovable solo si el usuario lo pide
 
 ## No tocar
 
-- Repo **`dracky`** (Lovable) sin petición explícita
-- Secretos en git de forma innecesaria
-- Borrar backups sin OK
+- Repo `dracky` sin petición explícita
+- Secretos en git
 
 ## Enlaces
 
 | Qué | URL |
 |-----|-----|
 | ai-bridge | https://github.com/adrianodemoraissames882-del/ai-bridge |
-| INCIDENTE (histórico) | https://github.com/adrianodemoraissames882-del/ai-bridge/blob/main/INCIDENT_HERMES_ROLLBACK.md |
+| Hermes docs install | https://hermes-agent.nousresearch.com/docs/ |
 | Web | https://dracky.lovable.app |
 
 ## Mensaje para la siguiente IA
 
-1. Leer este `STATUS.md`.
-2. Lab = **VM nueva** ya con Ubuntu; instalar stack en orden (apt→Docker→Tailscale→Ollama 0.0.0.0→WebUI→snapshot→Hermes).
-3. **No modificar** `adrianodemoraissames882-del/dracky`.
-4. Contraseñas: las que el usuario anotó en el instalador (no asumir `passetg0`).
+1. Leer este STATUS.
+2. Lab casi completo; falta Hermes en VM `dracky`.
+3. Install: `curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash` luego `hermes setup` con DeepSeek.
+4. **No** modificar `dracky` (Lovable).
