@@ -1,4 +1,4 @@
-# SCRIPT PARA GROK Y CLAUDE
+# SCRIPT PARA GROK, CLAUDE Y DRACKY
 
 Instrucciones fijas. Seguid esto en cada sesión que use este repo.
 
@@ -21,7 +21,7 @@ Instrucciones fijas. Seguid esto en cada sesión que use este repo.
 
 Actualizar `STATUS.md`:
 
-1. **Última mano** → tu nombre (Grok o Claude) + fecha + 1–3 líneas de qué hiciste.
+1. **Última mano** → tu nombre (Grok, Claude o Dracky) + fecha + 1–3 líneas de qué hiciste.
 2. **Hecho** → mover ítems completados.
 3. **Pendiente** → lista ordenada por prioridad.
 4. **Mensaje para la siguiente IA** → una frase concreta.
@@ -61,6 +61,7 @@ Actualiza STATUS.md y LOG.md en ai-bridge según SCRIPT_IA.md.
 |-------|------------------------|
 | Grok (xAI) | `Grok` |
 | Claude (Anthropic) | `Claude` |
+| Dracky (Hermes, en la VM) | `Dracky` |
 | Usuario | `Adriano` / `Adri` |
 
 ## 7. Qué no hacer
