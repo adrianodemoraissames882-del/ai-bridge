@@ -1,21 +1,24 @@
 #!/usr/bin/env bash
 # Backup del lab Dracky (VM). NO incluye secretos: el .env se guarda aparte.
-# Uso:      ./backup.sh [destino]   -> completo (incluye cache de modelos, ~960 MB)
-#           SLIM=1 ./backup.sh       -> sin cache de modelos (se re-descargan solos)
+#
+# Uso:   ./backup.sh [destino]        -> por defecto SIN cache de modelos (~60 KB)
+#        FULL=1 ./backup.sh           -> completo, incluye cache de modelos (~960 MB)
+#
+# La cache de modelos (embeddings) se re-descarga sola, así que por defecto se omite.
 set -euo pipefail
 
 DEST="${1:-$HOME/dracky-recovery/backups}"
-SLIM="${SLIM:-0}"
+FULL="${FULL:-0}"
 STAMP="$(date +%Y%m%d-%H%M)"
 mkdir -p "$DEST"
 
-SUFFIX=""
-EXCLUDE=""
-MODE="completo"
-if [ "$SLIM" = "1" ]; then
-  SUFFIX="slim-"
-  EXCLUDE="--exclude=./cache"
-  MODE="sin cache de modelos"
+SUFFIX="slim-"
+EXCLUDE="--exclude=./cache"
+MODE="sin cache de modelos"
+if [ "$FULL" = "1" ]; then
+  SUFFIX=""
+  EXCLUDE=""
+  MODE="completo (con cache de modelos)"
 fi
 
 echo "==> 1/2 Volumen de Open WebUI: chats, usuarios, login ($MODE)"
