@@ -123,15 +123,20 @@ En Telegram: manda un mensaje al bot y `/commands` para ver los comandos disponi
 ## 6. Backup (sin secretos)
 
 ```bash
-~/dracky-recovery/backup.sh              # volumen WebUI + config de Hermes
+~/dracky-recovery/backup.sh              # por defecto: SIN cache de modelos (~60 KB)
+FULL=1 ~/dracky-recovery/backup.sh       # completo, incluye cache de modelos (~960 MB)
 ```
+
+Cron instalado: **domingos 03:00** (slim, log en `~/dracky-recovery/backup.log`).
 
 Genera en `~/dracky-recovery/backups/`:
 
-- `open-webui-data-FECHA.tgz` — chats, usuarios, login (volumen Docker)
+- `open-webui-data-slim-FECHA.tgz` — chats, usuarios, login, vector_db y uploads (volumen Docker)
 - `hermes-config-FECHA.tgz` — SOUL.md, MEMORY.md, memories/, config.yaml, cron/
 
-El `.env` **no** se copia a propósito: guárdalo aparte (gestor de contraseñas).
+La diferencia entre slim y completo es solo la carpeta `cache` del volumen (modelos de
+embeddings), que se re-descarga sola. El `.env` **no** se copia a propósito: guárdalo
+aparte (gestor de contraseñas).
 
 ---
 
