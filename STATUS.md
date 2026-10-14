@@ -4,64 +4,74 @@
 
 ## Última mano
 
-- **Quién:** Dracky (Hermes)
-- **Cuándo:** 2026-10-13
-- **Qué:** **Honcho operativo**. SDK `honcho-ai==2.2.0` instalado en el python de Hermes, stack local arriba y sano (api/database/redis `healthy`, deriver `running`), `hermes honcho status` OK. **Bug corregido:** el wizard dejó las embeddings en **OpenAI** (`text-embedding-3-small`) → movidas a Gemini. Dreams OFF. Prueba funcional: `message_embeddings` 0→1 con vector de 1536 dims y cero errores en el deriver. **Pendiente único:** reiniciar el gateway de Hermes.
+- **Quién:** Grok
+- **Cuándo:** 2026-10-14
+- **Qué:** **Honcho cerrado de punta a punta.** Gateway reiniciado (`systemctl --user restart hermes-gateway`). `hermes honcho status` → Enabled True, workspace Dracky, peers Adriano/Dracky, hybrid, uncapped, dialectic cada 2 turnos. Prueba de memoria OK (Fortnite + SMR recordados). Funnel `https://dracky-1.tail78f25d.ts.net` → Open WebUI. Secrets Lovable ya puestos; chat web OK según Adri. **Siguiente:** confirmar `~/.hermes/honcho.json` (Paso 5 workspaces), RAG Open WebUI (Paso 6), extender backup volúmenes Honcho (Paso 7).
 
 ---
 
-## Lab (cerrado)
+## Lab (cerrado / operativo)
 
 | Ítem | Estado |
 |------|--------|
-| VM Dracky-lab | OK · `adri` @ `dracky` (encendida; sin VM no hay respuestas) |
+| VM Dracky-lab | OK · `adri` @ `dracky` |
 | Docker / Tailscale / Ollama / WebUI / DeepSeek | OK |
-| 5 modos + comandos de tono | OK · `titanwing`/`titanicwing` y `dracky`/`draky`, **sin barra en Hermes** |
-| Hermes + `~/.hermes/SOUL.md` | OK |
-| Gateway Hermes | systemd de **usuario** (enabled + linger) · **necesita reinicio** para cargar Honcho |
-| Acceso a WebUI | **Público** por Funnel: `https://dracky-1.tail78f25d.ts.net` |
-| API de WebUI | OpenAI-compat en `/api` · exige key (401 verificado) · API keys **ya habilitadas** |
-| Memoria | built-in (`MEMORY.md`/`USER.md`) + **Honcho local** (`memory.provider: honcho`) |
-| Honcho | Stack Docker local: api, deriver, Postgres, Redis · `http://127.0.0.1:8000` · `AUTH_USE_AUTH=false` |
-| Recuperación | `RESTORE.md` + `backup.sh` + cron domingos 03:00 (**no** cubre volúmenes de Honcho aún) |
-| Secrets | `~/.hermes/.env` chmod 600; no en git público |
+| 5 modos + comandos tono | OK · en WebUI con personalidad; Hermes sin barra |
+| Hermes + SOUL | OK |
+| Gateway Hermes | systemd usuario · **reiniciado 2026-10-13** · Honcho activo |
+| Acceso WebUI | Público Funnel: `https://dracky-1.tail78f25d.ts.net` (proxy → 127.0.0.1:3000) |
+| API WebUI | OpenAI-compat · keys habilitadas · secrets en Lovable |
+| Memoria | Honcho local (`memory.provider: honcho`) · peers acumulando tras 1ª conversación |
+| Honcho stack | Docker: api, deriver, Postgres, Redis · healthy · `http://127.0.0.1:8000` · AUTH off |
+| Embeddings | **Gemini** (`gemini-embedding-001`) — ya no OpenAI |
+| Dreams | OFF |
+| Lovable front | Secrets OK · chat backend OK (según Adri 2026-10-13) |
+| Recuperación | `RESTORE.md` + `backup.sh` · **aún no** cubre volúmenes Honcho |
 
-## Hecho (2026-10-13, Dracky)
+## Hecho desde 2026-10-13 → 2026-10-14
 
-- `honcho-cli 0.2.0` (vía `uv`) y stack local levantado por Adri con el wizard (perfil `local`, 4 contenedores sanos).
-- SDK `honcho-ai==2.2.0` instalado **en el python de Hermes** (`~/.hermes/tools/python-*/bin/python3`).
-- Wizard: `gemini` para deriver, summary, dream (deduction + induction) y los 5 niveles de dialectic (`gemini-2.0-flash`).
-- **Fallo encontrado y corregido:** `[embedding]` seguía en **OpenAI** (`transport=openai`, `text-embedding-3-small`). Sin key de OpenAI, el deriver habría fallado al primer mensaje real. Añadido en `~/.honcho/profiles/local/.env` (con copia `.env.bak-*`):
-  `EMBEDDING_MODEL_CONFIG__TRANSPORT=gemini`, `EMBEDDING_MODEL_CONFIG__MODEL=gemini-embedding-001`, `DREAM_ENABLED=false`.
-  Reinicio del stack sin borrar datos (`honcho stop && honcho start`).
-- **Verificación funcional**: mensaje de prueba → `message_embeddings` 0→1, `vector_dims = 1536`, deriver sin errores. `honcho status`: api/database/redis `healthy`, deriver `running`.
-- `hermes honcho status` OK: workspace `Dracky`, peers `Adriano`/`Dracky`, recall `hybrid`, contexto `uncapped`, dialectic cada 2 turnos. `memory.provider: honcho` presente en `config.yaml`.
-- Sigue vigente lo del 2026-10-10: **API keys de Open WebUI activadas** y auditoría del front `dracky.lovable.app`.
+- Reinicio gateway → plugin Honcho carga.
+- `hermes honcho status` OK post-restart.
+- Prueba memoria Telegram/gateway: recuerda Fortnite + SMR.
+- Confirmado Funnel + Open WebUI healthy `0.0.0.0:3000→8080`.
+- IP Tailscale lab: `100.66.109.25` · hostname `dracky-1`.
+- Secrets Lovable (`DRACKY_API_URL` / `DRACKY_API_KEY` / `DRACKY_MODEL`) ya configurados por Adri.
 
-## Correcciones al tracker (acumuladas)
+## Tracker Fase 3 — verdad operativa (no marcar optimista)
 
-1. La variable de Gemini es **`LLM_GEMINI_API_KEY`**; **Infisical no está instalado** en la VM.
-2. Los defaults de Honcho son **OpenAI**. El wizard cambia a Gemini los módulos de chat/razonamiento **pero NO las embeddings** → hay que añadirlas a mano (es el fallo que rompía el deriver).
-3. `honcho start --setup` **exige TTY** (no lo puede lanzar un agente).
-4. SDK de Honcho en Hermes: el lanzador `hermes` es un script **`/bin/sh`**, no un shebang de Python. Instalar con
-   `uv pip install --python ~/.hermes/tools/python-*/bin/python3 'honcho-ai==2.2.0'`.
-5. WebUI 0.11.4 **sin 2FA**; sus API keys venían **desactivadas** (`auth.enable_api_keys` ausente → `False`).
-6. En Hermes los comandos de tono van **sin barra**.
-7. El **DNS/egress de la VM miente** sobre el alcance público (NAT VirtualBox): verificar por TLS contra el ingress con SNI real, o desde el móvil.
-8. Los **dreams vienen ON por defecto** en Honcho y consumen cuota del proveedor.
+| Tarea | Estado real |
+|-------|-------------|
+| Honcho (Postgres + pgvector + Redis) | ✅ |
+| Gemini para Honcho (deriver/dialectic/embeddings) | ✅ |
+| Honcho UI visual | ❌ no instalada (no necesaria; gasta RAM) |
+| Gemini análisis vídeo | ❌ no configurado |
+| Workspaces | 🔄 un workspace `Dracky` + peers Adriano/Dracky (bastante; confirmar honcho.json) |
+| RAG ChromaDB aparte | ❌ usar RAG nativo Open WebUI (Paso 6) |
+| Backup GitHub / cron | 🔄 backup.sh existe; **falta** volúmenes Honcho |
+| Script recuperación | 🔄 RESTORE.md existe; actualizar tras backup Honcho |
+| Auto-actualización | ❌ a mano mensualmente |
+| Qwen2.5:14b | ❌ tras SSD 2TB |
 
-## Pendiente (ordenado)
+## Pendiente (ordenado — plan Claude + Grok)
 
-1. **Reiniciar el gateway** (`systemctl --user restart hermes-gateway`) → luego verificar que el proveedor carga y que los peers acumulan.
-2. Extender `backup.sh` con los volúmenes de Honcho (Postgres/Redis).
-3. **Front**: quitar engranaje + claves en localStorage + `/api/dracky-test`; reescribir FAQ; exigir sesión válida en `/api/chat`; añadir CSP.
-4. **Lovable secrets**: `DRACKY_API_URL=https://dracky-1.tail78f25d.ts.net/api` · `DRACKY_API_KEY=<api key WebUI>` · `DRACKY_MODEL=deepseek-flash` (id, no `ARCANO`).
-5. **Rotar contraseñas**: VM (último cambio 28 sep) y WebUI — ambas escritas en chat y el login es público.
-6. Chromium de Hermes roto (faltan 12 libs) — instalarlas si se quiere revisión visual del front.
+1. **Paso 5:** `cat ~/.hermes/honcho.json` (sin claves) → confirmar workspace/peers → marcar workspaces en tracker.
+2. **Paso 6 RAG:** Open WebUI → Workspace → Conocimiento `draky-docs` → subir doc → probar con `#`.
+3. **Paso 7:** Extender `backup.sh` + `RESTORE.md` con volúmenes Honcho (Postgres/Redis). No subir `.env` ni tokens.
+4. Rotar contraseñas VM + Open WebUI (siguen en chats; login Funnel público).
+5. Front restante (si aplica): engranaje/localStorage, FAQ, CSP, `/api/chat` endurecido.
+6. Instantánea VirtualBox recomendada post-Honcho estable (`post-honcho-ok`).
 
-## Mensaje para la siguiente IA
+## Correcciones al tracker (siguen vigentes)
 
-Grok/Claude: Honcho está montado y **verificado con una prueba real**, no de oído — pero las embeddings venían en OpenAI y eso rompía el deriver; está corregido y anotado arriba. Falta solo el reinicio del gateway, que es de Adri. El engranaje del front sigue en producción y las contraseñas siguen sin rotar.
+1. Variable Gemini: **`LLM_GEMINI_API_KEY`**; Infisical **no** instalado.
+2. Wizard Honcho deja embeddings en **OpenAI** aunque elijas Gemini → hay que forzar Gemini a mano.
+3. `honcho start --setup` exige TTY.
+4. SDK: `hermes` es `/bin/sh` → `uv pip install --python ~/.hermes/tools/python-*/bin/python3 'honcho-ai==2.2.0'`.
+5. WebUI sin 2FA; API keys había que activarlas.
+6. Comandos tono en Hermes **sin barra**.
+7. DNS/egress VM miente (NAT VirtualBox).
+8. Dreams ON por defecto → dejar OFF hasta validar.
+9. **No** instalar Honcho UI ni ChromaDB aparte salvo necesidad explícita.
 
 ## No tocar
 
@@ -69,8 +79,17 @@ Grok/Claude: Honcho está montado y **verificado con una prueba real**, no de o�
 - API keys en commits
 - `OLLAMA_HOST` a `127.0.0.1` (rompe Open WebUI)
 
-## Para Claude (actualizado)
+## Repos / directorios (mapa para Claude)
 
-1. Leer `SOUL.md`, `MEMORY.md`, `STATUS.md`, `LOG.md`, `RESTORE.md` en este repo (si el conector no ve privado → Adri pega texto).
-2. **No** indicar `cd ~/ai-bridge` en la VM.
-3. Respuestas cortas (plan gratis Claude).
+| Dónde | Qué |
+|-------|-----|
+| `adrianodemoraissames882-del/ai-bridge` (este repo) | STATUS, LOG, SOUL, MEMORY, RESTORE, backup.sh, handoff Grok↔Claude |
+| `adrianodemoraissames882-del/dracky` | Código web Lovable — **no tocar** sin OK Adri |
+| VM `~/.hermes/` | config.yaml, SOUL.md, honcho.json, .env |
+| VM `~/.honcho/` | perfiles local, .env embeddings |
+| VM Docker | open-webui, honcho-local-{api,deriver,database,redis} |
+| Funnel | `https://dracky-1.tail78f25d.ts.net` → :3000 |
+
+## Mensaje corto para la siguiente IA
+
+Honcho **cerrado y probado**. Lovable secrets + chat OK. Siguiente: Paso 5 (honcho.json) → Paso 6 RAG WebUI → Paso 7 backup volúmenes Honcho. No reinstalar Honcho. No tocar repo `dracky` Lovable.
