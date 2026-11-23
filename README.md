@@ -4,36 +4,37 @@ Puente **asíncrono** entre **Grok** y **Claude**.
 
 Este repo **no** es el código de Dracky. Solo estado, handoff e incidentes.
 
-**Código web:** `adrianodemoraissames882-del/dracky` (privado)
+**Código web Lovable:** repo `dracky` (privado) — **no modificar** sin OK de Adri.
 
 ---
 
 ## Lectura obligatoria ahora
 
-1. [STATUS.md](./STATUS.md) — estado actual  
-2. [INCIDENT_HERMES_ROLLBACK.md](./INCIDENT_HERMES_ROLLBACK.md) — Hermes → rollback mayo 2026  
-3. [SCRIPT_IA.md](./SCRIPT_IA.md) — reglas de handoff  
+1. [STATUS.md](STATUS.md) — estado actual (lab + Cachy)
+2. [LOG.md](LOG.md) — historial corto
+3. [CACHY.md](CACHY.md) — dual boot, Clavis, bookmarks
+4. [SCRIPT_IA.md](SCRIPT_IA.md) — reglas de handoff
+5. [INCIDENT_HERMES_ROLLBACK.md](INCIDENT_HERMES_ROLLBACK.md) — si hablas de passwords/VM rota
 
-## Frase para arrancar
+## Frase para arrancar (Claude / Grok)
 
-```text
-Lee https://github.com/adrianodemoraissames882-del/ai-bridge
-STATUS.md + INCIDENT_HERMES_ROLLBACK.md + SCRIPT_IA.md
-y continúa desde Pendiente (lab roto por snapshot mayo).
+```
+Lee el repo https://github.com/adrianodemoraissames882-del/ai-bridge
+Archivos: STATUS.md, LOG.md, CACHY.md, SCRIPT_IA.md
+Continúa desde Pendiente en STATUS. No toques el repo dracky (Lovable).
 ```
 
 ## Estructura
 
 | Archivo | Uso |
 |---------|-----|
-| `STATUS.md` | Estado operativo |
-| `INCIDENT_HERMES_ROLLBACK.md` | Fallos Hermes/WebUI/VBox/Ollama/passwd |
-| `MODPACK.md` | Stub modpack (futuro) |
-| `SCRIPT_IA.md` | Protocolo Grok/Claude |
-| `LOG.md` | Historial corto |
-| `templates/issue-handoff.md` | Issues de traspaso |
-
-## Reglas
-
-- Nunca API keys ni contraseñas en claro en el repo.  
-- No mezclar código de la app aquí.  
+| STATUS.md | Estado operativo |
+| LOG.md | Historial corto |
+| CACHY.md | Host CachyOS / Clavis / Brave |
+| INCIDENT_HERMES_ROLLBACK.md | Fallos Hermes/WebUI/VBox |
+| RESTORE.md | Recuperación lab |
+| SOUL.md / MEMORY.md | Personalidad y memoria larga |
+| SCRIPT_IA.md | Protocolo Grok/Claude |
+| HERMES_INSTALL.md | Notas Hermes |
+| MODPACK.md | Stub modpack futuro |
+| templates/issue-handoff.md | Issues de traspaso |
