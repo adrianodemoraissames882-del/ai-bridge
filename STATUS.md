@@ -6,25 +6,23 @@
 ## Última mano
 
 - **Quién:** Grok
-- **Cuándo:** 2026-11-25
-- **Qué:** Adri confirma **Clavis desinstalado**. Dual boot sigue OK. Claude solo pudo leer STATUS (límite de peticiones) y quedó desfasado; el bridge ya tenía Nov-23. Rol Cachy vs Windows aclarado. Siguiente prioritario: **rotar passwords** VM + Open WebUI.
+- **Cuándo:** 2026-11-25 (tarde)
+- **Qué:** Adri confirma **passwords VM + Open WebUI ya rotadas** (no pegar en chats). Clavis desinstalado. Dual boot roles claros. Claude falló leyendo CACHY/LOG por límite de tool calls — usar un solo prompt con raw links. Pendiente: arreglar `authorized_keys` en Windows (host `dracky-ssh`) si quedó el placeholder del Set-Content.
 
 ---
 
-## Lab VM Dracky (operativo — última foto Oct 2026)
+## Lab VM Dracky (operativo)
 
 | Ítem | Estado |
 |------|--------|
 | VM Dracky-lab (Ubuntu, VirtualBox) | OK · user `adri` @ host `dracky` |
 | Docker / Tailscale / Ollama `0.0.0.0:11434` / Open WebUI | OK |
-| DeepSeek API (principal) + Groq (respaldo) | OK |
-| 5 modos Open WebUI | OK · RÚNICO / FULMÍNEO / ÍGNEO / ARCANO / ETÉREO |
-| Personalidad Dracky + regla no-validar + `/titanwing` `/draky` | OK |
-| Hermes + SOUL + gateway | OK · Honcho provider |
+| DeepSeek (principal) + Groq | OK |
+| 5 modos + personalidad + `/titanwing` `/draky` | OK |
+| Hermes + SOUL + Honcho | OK (Fase 3 memoria cerrada) |
 | Funnel WebUI | `https://dracky-1.tail78f25d.ts.net` (revalidar) |
-| Honcho stack | healthy · workspace **Dracky** |
-| RAG | Open WebUI Knowledge **draky-docs** |
-| Backup lab / Honcho | cron dom 03:00 / diario 04:00 |
+| Passwords VM + Open WebUI | ✅ **Rotadas** (2026-11-25) — no documentar valor |
+| RAG draky-docs + backups cron | OK |
 
 ---
 
@@ -32,41 +30,57 @@
 
 | Ítem | Estado |
 |------|--------|
-| Dual boot Windows 11 + CachyOS | ✅ Hecho |
-| Clavis Shell | ❌ **Desinstalado** (Adri 2026-11-25) — no reintentar salvo petición |
-| Stack Cachy actual | VS Code, VirtualBox, yazi, cava, Brave, terminal rice |
-| Brave bookmarks IA/Dracky | Pendiente |
+| Dual boot Windows 11 + CachyOS | ✅ |
+| Clavis | ❌ Desinstalado — no reintentar |
+| Stack Cachy | VS Code, VirtualBox, yazi, cava, Brave, rice |
 
-### Rol del dual boot (acuerdo práctico)
+### Roles dual boot
 
-| Sistema | Para qué |
-|---------|----------|
-| **Windows 11** | Fortnite, Minecraft Launcher (Microsoft Store), Word/Office y similares, juegos con anticheat/Easy Anti-Cheat, apps de tienda MS |
-| **CachyOS** | Dev (VS Code, terminal, yazi, cava), VirtualBox + lab Dracky, Tailscale, Brave, rice, herramientas Linux que en Windows no hay o van peor |
+| Sistema | Uso |
+|---------|-----|
+| **Windows 11** | Fortnite, Minecraft Launcher (MS Store), Word/Office, juegos EAC/anticheat |
+| **CachyOS** | Dev (VS Code, yazi, cava), VirtualBox + lab, Tailscale, Brave, Linux tools |
 
-No hace falta que Cachy sustituya el gaming Windows. Son roles complementarios.
+Complementarios, no sustitutos.
+
+### SSH Windows (host dracky-ssh)
+
+Adri ejecutó mal:
+`Set-Content ... authorized_keys -Value "ssh-ed25519 PEGA_AQUI_..."`
+Hay que **sustituir** por la clave pública real de la máquina que debe entrar (p. ej. Cachy o la que genere `ssh-keygen`), una sola línea, Encoding ascii. Ver nota en LOG.
+
+---
+
+## Enlaces Dracky (producto / lab)
+
+| Qué | URL |
+|-----|-----|
+| Web Lovable (casa) | https://dracky.lovable.app |
+| Funnel Open WebUI | https://dracky-1.tail78f25d.ts.net |
+| Bridge Grok↔Claude | https://github.com/adrianodemoraissames882-del/ai-bridge |
+| Repo código web | `dracky` (privado) — **no tocar** sin OK |
+| Tailscale admin | https://login.tailscale.com/admin/machines |
+
+Hub HTML / páginas extra: Adri quiere retocar el HTML del hub; coordinar sin romper Lovable.
 
 ---
 
 ## Pendiente (prioridad)
 
-1. **Rotar contraseñas** VM (`passwd`) + Open WebUI (Ajustes → Cuenta). No pegarlas en chats.
-2. Instantánea VirtualBox estable si aún no.
-3. Brave en Cachy: carpetas marcadores **IA** y **Dracky** (ver CACHY.md).
-4. Front Lovable solo si Adri pide.
-5. Modelos grandes → tras SSD 2TB.
-
----
+1. ~~Rotar passwords~~ ✅
+2. Arreglar `authorized_keys` en Windows si el placeholder sigue ahí.
+3. Instantánea VirtualBox estable.
+4. Brave marcadores IA/Dracky en Cachy.
+5. Hub HTML / front Lovable solo si Adri pide.
+6. Modelos grandes → tras SSD 2TB.
 
 ## No tocar
 
-- Repo **`dracky`** (Lovable) sin OK de Adri
+- Repo **dracky** (Lovable) sin OK
 - API keys en commits
-- `OLLAMA_HOST=127.0.0.1` (mantener `0.0.0.0:11434`)
-- Reinstalar Honcho/RAG / Clavis sin petición
+- `OLLAMA_HOST=127.0.0.1`
+- Reinstalar Honcho / Clavis sin petición
 
-## Mensaje para Claude / Grok
+## Mensaje corto para IAs
 
-Leer **STATUS.md** (esta versión 2026-11-25) + **LOG.md** + **CACHY.md**.  
-Clavis **abandonado**. Dual boot con roles claros Windows=gaming/Office, Cachy=dev/lab.  
-Siguiente: rotar passwords lab. No reabrir Fase 3 memoria.
+Passwords rotadas. Clavis off. Dual boot: Win=gaming/Office, Cachy=dev/lab. Leer raw STATUS+LOG+CACHY. No reabrir Fase 3.

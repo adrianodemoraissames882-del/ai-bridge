@@ -2,39 +2,22 @@
 
 ## Dual boot
 
-- **Estado:** Windows 11 + CachyOS (confirmado 2026-11-23).
-- **Clavis:** instalado a medias (niri/quickshell) → **desinstalado 2026-11-25**. No es prioritario.
+- Windows 11 + CachyOS (confirmado 2026-11-23).
+- **Windows:** Fortnite, Minecraft Launcher (Microsoft Store), Word/Office, juegos con anticheat.
+- **Cachy:** VS Code, VirtualBox, yazi, cava, Brave, terminal/rice, lab Dracky, Tailscale.
 
-## Rol frente a Windows
+## Clavis
 
-| Windows | CachyOS |
-|---------|---------|
-| Fortnite, Minecraft Launcher (MS Store) | VS Code, terminal (zsh/fish), yazi, cava |
-| Word / Office y similares | VirtualBox (VM Dracky) |
-| Juegos con anticheat estricto | Brave, Tailscale, rice, pacman/AUR |
-| Apps Microsoft Store | Herramientas Linux nativas |
+- Intentado 2026-11-18; key-cli falló (arch x86_64 vs Cachy).
+- **Desinstalado 2026-11-25.** No reintentar salvo Adri lo pida.
+- Si algún día: key-cli vía `./scripts/install.sh` del repo StatIndet/key-cli, no el one-liner roto.
 
-Cachy **no** tiene que correr Fortnite ni el launcher de la Store. Complementa Windows.
+## Brave
 
-## Clavis (histórico — cerrado)
+Carpetas objetivo **IA** y **Dracky** (marcadores) — aún pendiente montar en Cachy.
 
-- Fallo: `key-cli` packaging (`x86_64` vs Cachy `x86_64_v3` / `/tmp` limpio).
-- Adri desinstaló Clavis. Plasma Cachy es el escritorio actual.
-- Si algún día se retoma: source install de key-cli o Hyprland shells (Clave / Caelestia). Ver commits anteriores.
+## SSH hacia/desde Windows
 
-## Stack instalado (mencionado por Adri)
+Usuario Windows con carpeta SSH: `C:\Users\dracky-ssh\.ssh\`
 
-- VS Code
-- VirtualBox
-- yazi (file manager TUI)
-- cava (visualizador audio)
-- Brave (marcadores IA/Dracky pendientes)
-
-## Brave — carpetas marcadores objetivo
-
-**IA:** Claude, NotebookLM, Lovable, PixVerse, Groq, ChatGPT, Grok, DeepSeek  
-**Dracky:** dracky.lovable.app, Open WebUI (IP Tailscale:3000), Tailscale admin, Infisical, Cloudflare
-
-## Relación con el lab
-
-Cachy o Windows pueden arrancar VirtualBox; la VM Dracky es la misma. Tailscale une host + VM + móvil.
+Error conocido: se escribió el placeholder literal en `authorized_keys`. Corregir con la **clave pública real** (una línea `ssh-ed25519 AAAA... comentario`).
