@@ -6,8 +6,8 @@
 ## Última mano
 
 - **Quién:** Grok
-- **Cuándo:** 2026-11-23
-- **Qué:** Adri confirma **dual boot CachyOS + Windows hecho**. Actualización de bridge con todo el tramo reciente (rebuild lab, modos, Hermes path, Cachy, Clavis fallido, bookmarks Brave). Lab Dracky (VM) según estado Oct: Fase 3 memoria cerrada; no deshacer Honcho/RAG.
+- **Cuándo:** 2026-11-25
+- **Qué:** Adri confirma **Clavis desinstalado**. Dual boot sigue OK. Claude solo pudo leer STATUS (límite de peticiones) y quedó desfasado; el bridge ya tenía Nov-23. Rol Cachy vs Windows aclarado. Siguiente prioritario: **rotar passwords** VM + Open WebUI.
 
 ---
 
@@ -19,86 +19,54 @@
 | Docker / Tailscale / Ollama `0.0.0.0:11434` / Open WebUI | OK |
 | DeepSeek API (principal) + Groq (respaldo) | OK |
 | 5 modos Open WebUI | OK · RÚNICO / FULMÍNEO / ÍGNEO / ARCANO / ETÉREO |
-| Personalidad Dracky + regla no-validar + `/titanwing` `/draky` | OK (confirmado por Adri) |
+| Personalidad Dracky + regla no-validar + `/titanwing` `/draky` | OK |
 | Hermes + SOUL + gateway | OK · Honcho provider |
-| Funnel WebUI | `https://dracky-1.tail78f25d.ts.net` (verificar IP Tailscale actual) |
-| Honcho stack | healthy · workspace **Dracky** · peers Adriano/Dracky |
+| Funnel WebUI | `https://dracky-1.tail78f25d.ts.net` (revalidar) |
+| Honcho stack | healthy · workspace **Dracky** |
 | RAG | Open WebUI Knowledge **draky-docs** |
-| Backup lab | `~/dracky-recovery/backup.sh` · cron dom 03:00 |
-| Backup Honcho | `~/backups/honcho-backup.sh` · cron 04:00 |
-
-### Rebuild histórico (Sep 2026)
-
-Tras snapshot mayo y pérdida de passwd: VM **desde cero** (Ubuntu 26.04), Docker, Tailscale, Ollama override systemd, Open WebUI, DeepSeek connection UI, 5 custom models con system prompts reforzados, luego Hermes. Ver `INCIDENT_HERMES_ROLLBACK.md` + `RESTORE.md`.
+| Backup lab / Honcho | cron dom 03:00 / diario 04:00 |
 
 ---
 
-## CachyOS (host físico — Nov 2026)
+## CachyOS (host físico)
 
 | Ítem | Estado |
 |------|--------|
-| Dual boot Windows 11 + CachyOS | ✅ **Hecho** (Adri 2026-11-23) |
-| Rice / zsh / p10k / catppuccin / fastfetch | Hecho en prueba anterior (VM/sesión) |
-| Clavis Shell (niri + quickshell + key-cli) | ⚠️ **Bloqueado** |
-| Brave bookmarks (carpetas IA / Dracky) | Pendiente montar en Cachy |
+| Dual boot Windows 11 + CachyOS | ✅ Hecho |
+| Clavis Shell | ❌ **Desinstalado** (Adri 2026-11-25) — no reintentar salvo petición |
+| Stack Cachy actual | VS Code, VirtualBox, yazi, cava, Brave, terminal rice |
+| Brave bookmarks IA/Dracky | Pendiente |
 
-### Incidente Clavis (2026-11-18)
+### Rol del dual boot (acuerdo práctico)
 
-- `curl …/StatIndet/quickshell/main/install.sh \| bash` instala bien niri, quickshell, deps Cachy.
-- **Falla al final** empaquetando/registrando `key-cli`: el instalador hace `pacman -Qp` sobre  
-  `key-cli-…-x86_64.pkg.tar.zst` y en CachyOS el artefacto no cuadra (arch `x86_64` vs `x86_64_v3` / path limpio en `/tmp`).
-- `/tmp/clavis-build-*` se borra al fallar → no hay `.pkg.tar.zst` para `pacman -U` a mano.
-- **Workaround documentado:** instalar key-cli desde source:
-  ```bash
-  git clone --branch v2026.9.25 --depth 1 https://github.com/StatIndet/key-cli.git
-  cd key-cli && ./scripts/install.sh
-  ```
-  (instala en `/usr/local`, sin el bug de arch del instalador one-shot).
-- Alternativas tipo Clavis si no se quiere pelear: shells Hyprland (Clave, Caelestia) o quedarse en Plasma Cachy.
+| Sistema | Para qué |
+|---------|----------|
+| **Windows 11** | Fortnite, Minecraft Launcher (Microsoft Store), Word/Office y similares, juegos con anticheat/Easy Anti-Cheat, apps de tienda MS |
+| **CachyOS** | Dev (VS Code, terminal, yazi, cava), VirtualBox + lab Dracky, Tailscale, Brave, rice, herramientas Linux que en Windows no hay o van peor |
 
-Detalle: ver `CACHY.md`.
-
----
-
-## Tracker fases (resumen realidad)
-
-| Fase | Estado |
-|------|--------|
-| 1 Base VM + Ollama + WebUI + DeepSeek + 5 modos | ✅ |
-| 1B Hermes + SOUL + memoria archivos | ✅ (lab) |
-| 3 Memoria Honcho + RAG + backups | ✅ cerrada 2026-10-14 |
-| Web Lovable / SEO / logos falsos | Parcial — **no tocar repo dracky** sin Adri |
-| Cachy dual boot | ✅ |
-| Clavis en Cachy | ⚠️ key-cli |
-| Qwen grandes / SSD 2TB / mercado | Pendiente |
+No hace falta que Cachy sustituya el gaming Windows. Son roles complementarios.
 
 ---
 
 ## Pendiente (prioridad)
 
-1. **Rotar contraseñas** VM `adri` + Open WebUI (Funnel/público).
-2. Instantánea VirtualBox estable si aún no (`post-fase3` o posterior).
-3. En Cachy: completar **key-cli** source *o* abandonar Clavis y documentar alternativa.
-4. Brave en Cachy: carpetas marcadores **IA** y **Dracky** (ver CACHY.md).
-5. Front Lovable solo si Adri pide (engranaje, CSP, stats falsas, etc.).
-6. Modelos grandes → tras SSD 2TB.
+1. **Rotar contraseñas** VM (`passwd`) + Open WebUI (Ajustes → Cuenta). No pegarlas en chats.
+2. Instantánea VirtualBox estable si aún no.
+3. Brave en Cachy: carpetas marcadores **IA** y **Dracky** (ver CACHY.md).
+4. Front Lovable solo si Adri pide.
+5. Modelos grandes → tras SSD 2TB.
 
 ---
 
 ## No tocar
 
-- Repo **`dracky`** (código Lovable) sin OK explícito de Adri
+- Repo **`dracky`** (Lovable) sin OK de Adri
 - API keys en commits
-- Forzar `OLLAMA_HOST=127.0.0.1` (debe ser `0.0.0.0:11434`)
-- Reinstalar Honcho/RAG sin necesidad
-
-## Credenciales / IDs útiles (sin secretos)
-
-- Email lab / WebUI: `adrianodemoraissames882@gmail.com`
-- Tailnet / Funnel histórico: `dracky-1.tail78f25d.ts.net` — **revalidar** con `tailscale status`
-- Personalidad: dragón Dracky/Draky, gruñón sabio, relación tipo Hipo–Desdentado; comandos `/titanwing` (tono neutro) y `/draky` (vuelve personalidad)
+- `OLLAMA_HOST=127.0.0.1` (mantener `0.0.0.0:11434`)
+- Reinstalar Honcho/RAG / Clavis sin petición
 
 ## Mensaje para Claude / Grok
 
-Leer **STATUS.md** + **LOG.md** + **CACHY.md** + **SCRIPT_IA.md**.  
-Lab memoria Fase 3 **no reabrir**. Host: dual boot Cachy listo; Clavis a medias. Siguiente práctico: passwords lab y/o key-cli en Cachy.
+Leer **STATUS.md** (esta versión 2026-11-25) + **LOG.md** + **CACHY.md**.  
+Clavis **abandonado**. Dual boot con roles claros Windows=gaming/Office, Cachy=dev/lab.  
+Siguiente: rotar passwords lab. No reabrir Fase 3 memoria.
