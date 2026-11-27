@@ -1,6 +1,5 @@
 # STATUS — Dracky / lab / CachyOS
 
-> Fuente de verdad Grok ↔ Claude ↔ Dracky.
 > **Regla doble agente:** todo avance → STATUS + LOG (SCRIPT_IA.md §0).
 > **NO** tocar repo `dracky` (Lovable) sin OK de Adri.
 
@@ -8,51 +7,59 @@
 
 - **Quién:** Grok
 - **Cuándo:** 2026-11-27
-- **Qué:** **SSH Cachy → VM OK.** `ssh-copy-id` + login `adri@100.66.109.25` sin fricción. Red: Cachy `100.99.177.2`, VM `100.66.109.25`. Siguiente: comprobar servicios lab en VM (Ollama/WebUI) desde Cachy o empezar stack nativo en Cachy.
+- **Qué:** Healthcheck VM OK (Ollama active; WebUI, n8n, Honcho, SearXNG, stack metrics up). Adri recuerda objetivo: **control del PC host**, no solo chat en VM. Gap: Hermes en VM no controla Cachy/Windows sin puente SSH/skills en el host.
 
 ---
 
-## Red Tailscale
+## Lab VM `dracky-1` (100.66.109.25) — healthy
 
-| Nodo | IP | Estado |
-|------|-----|--------|
-| cachyos-x8664-1 (Cachy) | 100.99.177.2 | online · sshd · clave adri@cachy |
-| dracky-1 (VM) | 100.66.109.25 | online · **SSH desde Cachy ✅** |
+| Servicio | Estado |
+|----------|--------|
+| ollama | active |
+| open-webui | Up healthy |
+| n8n | Up |
+| honcho (api/db/redis/deriver) | Up healthy |
+| searxng | Up |
+| grafana, prometheus, cadvisor, node-exporter | Up |
 
-```bash
-# Desde Cachy
-ssh adri@100.66.109.25
-```
+SSH desde Cachy: ✅ `ssh adri@100.66.109.25`
 
 ---
 
-## Hecho reciente
+## Objetivo de producto: control del PC
 
-- Dual boot Cachy + Windows
-- Tailscale en Cachy
-- sshd + ed25519 en Cachy
-- SSH Cachy→VM por clave
-- Passwords VM/WebUI rotadas (antes)
-- Clavis desinstalado
+Dracky debe poder actuar en el **host** (Cachy prioritario; Windows en dual boot es más limitado):
+
+- Abrir programas, gestionar archivos, ejecutar scripts
+- Skills Hermes / automatización (n8n) hacia el host
+
+**Realidad técnica:** un agente **dentro de la VM** no controla el host solo. Hace falta una de:
+
+| Enfoque | Qué implica |
+|---------|-------------|
+| **A. Hermes (o agente) en Cachy** | Mejor para “controlar el PC” donde trabajas |
+| **B. Puente SSH VM → Cachy** | Hermes en VM ejecuta comandos vía `ssh adriano@100.99.177.2` |
+| **C. Solo VM** | Controla archivos/servicios de la VM, no Fortnite/Windows ni el escritorio Cachy |
+
+Recomendación: **A** (agente en Cachy) o **B** corto plazo reutilizando Hermes de la VM.
+
+---
+
+## Red
+
+| Nodo | IP |
+|------|-----|
+| Cachy `cachyos-x8664-1` | 100.99.177.2 |
+| VM `dracky-1` | 100.66.109.25 |
 
 ## Pendiente (prioridad)
 
-1. Desde Cachy: `curl -s http://100.66.109.25:3000` / o navigar Open WebUI; `ssh` + `systemctl status ollama` / `docker ps`.
-2. Decidir: mantener lab en VM un tiempo vs migrar nativo a Cachy.
-3. (Opcional) Borrar nodo offline `cachyos-x8664` en Tailscale admin.
-4. MagicDNS warning — no bloquea.
-5. Brave marcadores; Lovable solo con OK.
-
-## Enlaces
-
-| Qué | URL / comando |
-|-----|----------------|
-| Web | https://dracky.lovable.app |
-| Funnel | https://dracky-1.tail78f25d.ts.net |
-| Bridge | https://github.com/adrianodemoraissames882-del/ai-bridge |
-| SSH VM | `ssh adri@100.66.109.25` |
-| SSH Cachy | `ssh adriano@100.99.177.2` |
+1. Elegir **A** (Hermes/skills en Cachy) o **B** (SSH VM→Cachy para comandos host).
+2. Si B: clave de la VM hacia `adriano@100.99.177.2` + skill/shell seguro.
+3. Si A: instalar runtime Hermes/agent en Cachy apuntando a DeepSeek + SOUL.
+4. Probar 2–3 acciones reales (abrir app, listar carpeta, script).
+5. Migración lab nativo Cachy = fase mayor; no bloquea el puente de control.
 
 ## Mensaje para la siguiente IA
 
-SSH lab operativo Cachy↔VM. Adri contento. Siguiente lógico: healthcheck WebUI/Ollama en VM o plan migración nativa Cachy.
+Lab VM healthy. Prioridad usuario = **control PC host**. No solo chat. Proponer A o B y ejecutar el puente.
