@@ -2,22 +2,24 @@
 
 ## Dual boot
 
-- Windows 11 + CachyOS (confirmado 2026-11-23).
-- **Windows:** Fortnite, Minecraft Launcher (Microsoft Store), Word/Office, juegos con anticheat.
-- **Cachy:** VS Code, VirtualBox, yazi, cava, Brave, terminal/rice, lab Dracky, Tailscale.
+- Windows 11: Fortnite, Minecraft Store, Word/Office.
+- CachyOS: dev + lab + Tailscale. Usuario: **adriano**.
+
+## Tailscale (2026-11-27)
+
+- Nodo actual: **cachyos-x8664-1** → **100.99.177.2**
+- VM lab: **dracky-1** → **100.66.109.25**
+- Nodo viejo offline: cachyos-x8664 (100.81.53.63) — candidado a borrar en admin
+- MagicDNS: warning resolved+NM; usar IPs 100.x
+
+## SSH
+
+- sshd: enabled
+- Clave host: `~/.ssh/id_ed25519` / `.pub` comentario `adri@cachy`
+- Ver pública: `cat ~/.ssh/id_ed25519.pub`
+- Entrar a Cachy: `ssh adriano@100.99.177.2`
+- Entrar a VM desde Cachy: `ssh adri@100.66.109.25` (tras copiar pub a authorized_keys de la VM)
 
 ## Clavis
 
-- Intentado 2026-11-18; key-cli falló (arch x86_64 vs Cachy).
-- **Desinstalado 2026-11-25.** No reintentar salvo Adri lo pida.
-- Si algún día: key-cli vía `./scripts/install.sh` del repo StatIndet/key-cli, no el one-liner roto.
-
-## Brave
-
-Carpetas objetivo **IA** y **Dracky** (marcadores) — aún pendiente montar en Cachy.
-
-## SSH hacia/desde Windows
-
-Usuario Windows con carpeta SSH: `C:\Users\dracky-ssh\.ssh\`
-
-Error conocido: se escribió el placeholder literal en `authorized_keys`. Corregir con la **clave pública real** (una línea `ssh-ed25519 AAAA... comentario`).
+Desinstalado. No reintentar.
