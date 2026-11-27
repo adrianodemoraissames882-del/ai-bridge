@@ -1,65 +1,67 @@
 # STATUS — Dracky / lab / CachyOS
 
-> **Regla doble agente:** todo avance → STATUS + LOG (SCRIPT_IA.md §0).
+> **Regla doble agente:** STATUS + LOG en cada avance (SCRIPT_IA.md §0).
 > **NO** tocar repo `dracky` (Lovable) sin OK de Adri.
 
 ## Última mano
 
 - **Quién:** Grok
 - **Cuándo:** 2026-11-27
-- **Qué:** Healthcheck VM OK (Ollama active; WebUI, n8n, Honcho, SearXNG, stack metrics up). Adri recuerda objetivo: **control del PC host**, no solo chat en VM. Gap: Hermes en VM no controla Cachy/Windows sin puente SSH/skills en el host.
+- **Qué:** Alineación **Fase 5** con lectura de Claude. Lab VM healthy. Prioridad Adri = control PC; definición: **Cachy host** (no Windows gaming). Orden Fase 5 acordado abajo.
 
 ---
 
-## Lab VM `dracky-1` (100.66.109.25) — healthy
+## Fase 5 — Agente e Investigación
 
-| Servicio | Estado |
-|----------|--------|
-| ollama | active |
-| open-webui | Up healthy |
-| n8n | Up |
-| honcho (api/db/redis/deriver) | Up healthy |
-| searxng | Up |
-| grafana, prometheus, cadvisor, node-exporter | Up |
+| # | Tarea | Estado | Notas |
+|---|--------|--------|--------|
+| 1 | Investigador autónomo (web → informe) | ✅ Hecho (LOG 2026-10-21) | Telegram/informe |
+| 2 | MCP servers en Hermes | ⬜ Pendiente | Empezar 1–2 **solo lectura** |
+| 3 | Subagentes (hasta 3 paralelos) | ⬜ Pendiente | Probar con 2; vigilar RAM VM |
+| 4 | Control básico del PC | 🔄 Definido / por cablear | Ver sección Control |
+| 5 | Open WebUI Tools (Python en WebUI) | ⬜ Dejar para el final | Riesgo con Funnel público; Hermes ya cubre terminal |
 
-SSH desde Cachy: ✅ `ssh adri@100.66.109.25`
+**Fase 5B (idea, no tracker formal):** Guardia — vigilancia servicios + aviso Telegram (“Draky Empresas”).
 
----
+### Orden de ejecución
 
-## Objetivo de producto: control del PC
-
-Dracky debe poder actuar en el **host** (Cachy prioritario; Windows en dual boot es más limitado):
-
-- Abrir programas, gestionar archivos, ejecutar scripts
-- Skills Hermes / automatización (n8n) hacia el host
-
-**Realidad técnica:** un agente **dentro de la VM** no controla el host solo. Hace falta una de:
-
-| Enfoque | Qué implica |
-|---------|-------------|
-| **A. Hermes (o agente) en Cachy** | Mejor para “controlar el PC” donde trabajas |
-| **B. Puente SSH VM → Cachy** | Hermes en VM ejecuta comandos vía `ssh adriano@100.99.177.2` |
-| **C. Solo VM** | Controla archivos/servicios de la VM, no Fortnite/Windows ni el escritorio Cachy |
-
-Recomendación: **A** (agente en Cachy) o **B** corto plazo reutilizando Hermes de la VM.
+1. Investigador ✅  
+2. MCP (read-only)  
+3. Subagentes (2)  
+4. **Control PC** (puente host)  
+5. Open WebUI Tools solo si aporta algo nuevo  
 
 ---
 
-## Red
+## Control del PC (definición)
 
-| Nodo | IP |
-|------|-----|
-| Cachy `cachyos-x8664-1` | 100.99.177.2 |
-| VM `dracky-1` | 100.66.109.25 |
+- **“PC” = Cachy** (dev/lab), no Windows (Fortnite/Office).
+- Hermes hoy vive en la **VM** → no controla el host solo.
 
-## Pendiente (prioridad)
+| Vía | Qué |
+|-----|-----|
+| **B (corto)** | Hermes VM → `ssh adriano@100.99.177.2` + lista de comandos permitidos + OK humano en destructivo |
+| **A (limpio)** | Agente/Hermes en Cachy, control local |
+| Solo VM | Archivos/servicios de la VM — **no** cumple el objetivo de Adri |
 
-1. Elegir **A** (Hermes/skills en Cachy) o **B** (SSH VM→Cachy para comandos host).
-2. Si B: clave de la VM hacia `adriano@100.99.177.2` + skill/shell seguro.
-3. Si A: instalar runtime Hermes/agent en Cachy apuntando a DeepSeek + SOUL.
-4. Probar 2–3 acciones reales (abrir app, listar carpeta, script).
-5. Migración lab nativo Cachy = fase mayor; no bloquea el puente de control.
+---
+
+## Lab / red (operativo)
+
+| Nodo | IP | Notas |
+|------|-----|--------|
+| Cachy | 100.99.177.2 | sshd; clave adri@cachy |
+| VM dracky-1 | 100.66.109.25 | SSH desde Cachy ✅; stack Up |
+
+Ollama, open-webui, n8n, Honcho, SearXNG, metrics: healthy (check 2026-11-27).
+
+## Pendiente inmediato
+
+1. Elegir **B** o **A** para control host y cablear.
+2. MCP read-only (docs Hermes).
+3. Subagentes ×2 + mirar RAM.
+4. Open WebUI Tools al final / opcional.
 
 ## Mensaje para la siguiente IA
 
-Lab VM healthy. Prioridad usuario = **control PC host**. No solo chat. Proponer A o B y ejecutar el puente.
+Fase 5 orden: MCP → subagentes → control Cachy (B o A). No confundir control-VM con control-PC. Funnel = cuidado con WebUI Tools.
